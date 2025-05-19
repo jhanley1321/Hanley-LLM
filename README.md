@@ -7,7 +7,7 @@ Our first focus will be to get this to work as a general chat bot
 
 # Current Features
 * Currently set up to work with OpenAI API 
-* Interact Directly with the LLM chatbot
+* Interact Directly with the LLM chat bot
 * Interact with any tools you create or connect
 * In session memory for context retention
 * Context Limits
@@ -27,6 +27,10 @@ Our first focus will be to get this to work as a general chat bot
 * LLM + NLP Hybrid system for NLP tasks
 * BI and Analytics assistant
 * Data science/ML assistant
+* Docker Container
+* Vector Database Support for quick semantic search
+* PSQL support for Chat history (With slow, full semantic search)
+* Redis Layer support for caching 
 
 
 
