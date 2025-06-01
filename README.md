@@ -1,7 +1,34 @@
 # Open-LLM (WIP)
 A flexible multi-propose agentic LLM chatbot suitable for working with data at scale.
-There will be specialized NLP functionality built in, given its incredible performance these tasks.
-Our first focus will be to get this to work as a general chat bot 
+There will be specialized NLP functionality built in, given its incredible performance these tasks. Our first focus will be to get this to work as a general chat bot. 
+
+
+# How to use
+simply run the file on the command line for now using main.py
+```
+python main.py
+```
+
+# How to set up a local LLM (will be moved to it's own repo later)
+
+First, download Ollama. Next, You will need to look up what model you want to run locally, but for the current setup, I will be using llama2 and mxbai large; you can install them with the following commands if you haven't already:
+
+```
+ollama pull llama2
+ollama pull mxbai-embed-large
+```
+
+
+If you're using a local LLM with Ollama you will need to run 
+```
+ollama run  <model_name>
+```
+
+If your Ollama server for some reason shuts down or needs to be restarted simply run
+```
+ollama serve
+```
+
 
 
 
@@ -21,16 +48,18 @@ Our first focus will be to get this to work as a general chat bot
 * RAG
 * CAG
 * RAGAS for RAg evaluation
-* Basic Front-end Support 
+* Basic Front-end Support with Streamlit
 * Automatic tool detection
 * Specialized NLP functionality
 * LLM + NLP Hybrid system for NLP tasks
 * BI and Analytics assistant
 * Data science/ML assistant
 * Docker Container
-* Vector Database Support for quick semantic search
+* Vector Database Support for quick semantic search (Chroma for now)
 * PSQL support for Chat history (With slow, full semantic search)
 * Redis Layer support for caching 
+
+
 
 
 

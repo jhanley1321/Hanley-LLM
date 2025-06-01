@@ -7,7 +7,8 @@ load_dotenv()
 
 def main(agent=False):
     llm = LLM_Model()
-    llm.load_model()
+    # llm.load_model(model_type='ollama', model="llama3.2")
+    llm.load_model(model_type='openai')
     
     if agent == True:
         llm.load_agent()
@@ -15,5 +16,12 @@ def main(agent=False):
     else:
         llm.run_chatbot()
 
+   
+
+
+
+
 if __name__ == "__main__":
     main(agent=True)
+
+    
