@@ -33,29 +33,29 @@ ollama serve
 
 
 # Current Features
-* Currently set up to work with OpenAI API 
+* Use multiple LLM Models
 * Interact Directly with the LLM chat bot
 * Interact with any tools you create or connect
 * In session memory for context retention
 * Context Limits
+* Rag Support
+* Vector Database Support for quick semantic search (Chroma for now)
+* Automatic tool detection
+
 
 # Features Roadmap
-* Enhanced multi-modal support
-* Enhanced LangChain integration
 * Enhanced LangGraph integration
 * Palantir integration (Maybe, may not be needed )
 * MCP integration
-* RAG
 * CAG
 * RAGAS for RAg evaluation
 * Basic Front-end Support with Streamlit
-* Automatic tool detection
 * Specialized NLP functionality
 * LLM + NLP Hybrid system for NLP tasks
 * BI and Analytics assistant
 * Data science/ML assistant
 * Docker Container
-* Vector Database Support for quick semantic search (Chroma for now)
+
 * PSQL support for Chat history (With slow, full semantic search)
 * Redis Layer support for caching 
 
