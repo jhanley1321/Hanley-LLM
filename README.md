@@ -30,6 +30,12 @@ ollama server
 ```
 
 
+# Running through Fast API
+
+To Reload the API
+```
+uvicorn main:app --reload
+```
 
 
 # Current Features
