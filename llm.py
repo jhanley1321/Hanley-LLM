@@ -37,7 +37,7 @@ class LLM_Model:
         else:
             raise ValueError(f"Unsupported model type: {model_type}")
 
-    def load_vector_db(self, collection_name="default_collection", persist_directory="./chroma_db"):
+    def load_chroma_db(self, collection_name="default_collection", persist_directory="./chroma_db"):
         """Load the vector database for retrieval"""
         self.vector_db = ChromaVectorDB(
             collection_name=collection_name,

@@ -15,7 +15,7 @@ def main(agent=False, chatbot=True, vector_db=True):
     
     if vector_db:
         # Load vector database
-        llm.load_vector_db(
+        llm.load_chroma_db( # add support for other vector dbs later 
             collection_name="restaurant_reviews",
             persist_directory="./chrome_langchain_db"
         )
@@ -41,6 +41,6 @@ def main(agent=False, chatbot=True, vector_db=True):
 
 
 if __name__ == "__main__":
-    main(agent=False, chatbot=False, vector_db=True)
+    main(agent=False, chatbot=True, vector_db=True)
 
     

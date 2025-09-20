@@ -26,7 +26,7 @@ ollama run  <model_name>
 
 If your Ollama server for some reason shuts down or needs to be restarted simply run
 ```
-ollama serve
+ollama server
 ```
 
 
