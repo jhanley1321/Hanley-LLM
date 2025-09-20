@@ -1,11 +1,15 @@
 # chat_api.py
-from fastapi import APIRouter, HTTPException, Depends # <-- Import Depends
+import os # <-- Import os
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import StreamingResponse
 from llm import LLM_Model
 from pydantic import BaseModel
-import asyncio
+from auth import get_current_user
+import time, threading
+from dotenv import load_dotenv # <-- Import load_dotenv here too (defensive)
 
-from auth import get_current_user # <-- Import your auth dependency
+# Load environment variables (defensive, main.py also loads)
+load_dotenv()
 
 
 class ChatRequest(BaseModel):
@@ -13,14 +17,11 @@ class ChatRequest(BaseModel):
 
 
 class TokenLimiter:
-    """Utility class to limit token output from any generator."""
-    
     @staticmethod
     def limit_tokens(generator, max_tokens: int):
-        """Wrap any token generator with a max token limit."""
         count = 0
         for token in generator:
-            if token:  # Skip empty tokens
+            if token:
                 yield token
                 count += 1
                 if count >= max_tokens:
@@ -29,11 +30,8 @@ class TokenLimiter:
 
 
 class SSEFormatter:
-    """Utility class to format messages as Server-Sent Events."""
-    
     @staticmethod
     def format_stream(generator):
-        """Wrap a generator and yield SSE-formatted messages."""
         try:
             for item in generator:
                 yield f"data: {item}\n\n"
@@ -49,49 +47,50 @@ class ChatAPI:
         self.llm = LLM_Model()
         self.llm.load_model(model_type="ollama", model="llama3.2")
 
-        # Configuration
-        self.MAX_INPUT_LENGTH = 2000
-        self.MAX_OUTPUT_TOKENS = 150
+        # --- Simplified Config Loading from .env ---
+        self.MAX_INPUT_LENGTH = int(os.getenv("MAX_INPUT_LENGTH", "2000"))
+        self.MAX_OUTPUT_TOKENS = int(os.getenv("MAX_OUTPUT_TOKENS", "150"))
+        self.REQUEST_TIMEOUT_SECONDS = int(os.getenv("REQUEST_TIMEOUT_SECONDS", "60"))
+        # --- End Simplified Config ---
 
-        # Register endpoint - NOW WITH AUTH DEPENDENCY
         self.router.post("/chat")(self.chat_endpoint)
 
     def stream_chat_response(self, message: str):
-        """Main streaming logic - NOTE: This is sync, not async."""
-        
-        # Input validation
         if len(message) > self.MAX_INPUT_LENGTH:
             raise HTTPException(
                 status_code=413,
                 detail=f"Message too long. Max {self.MAX_INPUT_LENGTH} characters."
             )
 
+        raw_stream = self.llm.chat_stream(message)
+        limited_stream = TokenLimiter.limit_tokens(raw_stream, self.MAX_OUTPUT_TOKENS)
+
+        start_time = time.time()
+        timed_out = False
+
+        def timeout_trigger():
+            nonlocal timed_out
+            timed_out = True
+
+        timer = threading.Timer(self.REQUEST_TIMEOUT_SECONDS, timeout_trigger)
+        timer.start()
+
         try:
-            # 1. Get raw token stream from model (sync)
-            raw_stream = self.llm.chat_stream(message)
-            
-            # 2. Apply token limiting
-            limited_stream = TokenLimiter.limit_tokens(raw_stream, self.MAX_OUTPUT_TOKENS)
-            
-            # 3. Format as SSE and yield
             for sse_event in SSEFormatter.format_stream(limited_stream):
+                if timed_out:
+                    yield "data: [ERROR] Request timed out\n\n"
+                    yield "data: [DONE]\n\n"
+                    break
                 yield sse_event
-                
-        except Exception as e:
-            yield f"data: [ERROR] {str(e)}\n\n"
-            yield "data: [DONE]\n\n"
+        finally:
+            timer.cancel()
 
     async def chat_endpoint(
         self, 
         payload: ChatRequest, 
-        current_user: dict = Depends(get_current_user) # <-- NEW: Auth dependency
+        current_user: dict = Depends(get_current_user)
     ):
-        """Main endpoint handler."""
-        # current_user will contain {"user_id": "demo-user", "tenant_id": "demo-tenant"} if auth is successful
-        # If auth fails, HTTPException 401 is raised before this code runs.
-        
         message = payload.message
-        
         if not message.strip():
             raise HTTPException(status_code=400, detail="Missing message")
         
