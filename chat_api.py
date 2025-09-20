@@ -1,8 +1,11 @@
 # chat_api.py
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends # <-- Import Depends
 from fastapi.responses import StreamingResponse
 from llm import LLM_Model
 from pydantic import BaseModel
+import asyncio
+
+from auth import get_current_user # <-- Import your auth dependency
 
 
 class ChatRequest(BaseModel):
@@ -50,7 +53,7 @@ class ChatAPI:
         self.MAX_INPUT_LENGTH = 2000
         self.MAX_OUTPUT_TOKENS = 150
 
-        # Register endpoint
+        # Register endpoint - NOW WITH AUTH DEPENDENCY
         self.router.post("/chat")(self.chat_endpoint)
 
     def stream_chat_response(self, message: str):
@@ -78,12 +81,21 @@ class ChatAPI:
             yield f"data: [ERROR] {str(e)}\n\n"
             yield "data: [DONE]\n\n"
 
-    async def chat_endpoint(self, payload: ChatRequest):
+    async def chat_endpoint(
+        self, 
+        payload: ChatRequest, 
+        current_user: dict = Depends(get_current_user) # <-- NEW: Auth dependency
+    ):
         """Main endpoint handler."""
-        if not payload.message.strip():
+        # current_user will contain {"user_id": "demo-user", "tenant_id": "demo-tenant"} if auth is successful
+        # If auth fails, HTTPException 401 is raised before this code runs.
+        
+        message = payload.message
+        
+        if not message.strip():
             raise HTTPException(status_code=400, detail="Missing message")
         
         return StreamingResponse(
-            self.stream_chat_response(payload.message),
+            self.stream_chat_response(message),
             media_type="text/event-stream"
         )

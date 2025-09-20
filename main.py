@@ -20,8 +20,8 @@ def main():
     llm = LLM_Model()
     llm.load_model(model_type="ollama", model="llama3.2")
     # Test Text 
-    reply = llm.chat("Hello there, how are you?")
-    print("MODEL REPLY:", reply)
+    # reply = llm.chat("Hello there, how are you?")
+    # print("MODEL REPLY:", reply)
 
 
 if __name__ == "__main__":
