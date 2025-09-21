@@ -61,7 +61,8 @@ class ChatAPI:
             logging.basicConfig(
                 filename=log_path,
                 level=logging.INFO,
-                format="%(message)s"
+                format="%(message)s",
+                force=True   # FIX: ensure logging reconfigures each test
             )
 
         # Register endpoint
