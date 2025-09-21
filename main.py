@@ -9,7 +9,7 @@ load_dotenv()
 
 
 app = FastAPI()
-chat_api = ChatAPI()
+chat_api = ChatAPI(local_log=True)
 app.include_router(chat_api.router)
 
     
