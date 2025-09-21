@@ -5,3 +5,4 @@ HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
 HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
 HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
 {"timestamp": "2025-09-21T01:00:53.914618+00:00", "user_id": "demo-user", "tenant_id": "demo-tenant", "input_length": 6, "output_tokens": 9, "latency_ms": 2687.96, "status": "ok"}
+{"timestamp": "2025-09-21T01:32:52.140542+00:00", "user_id": "demo-user", "tenant_id": "demo-tenant", "input_length": 6, "output_tokens": 1, "latency_ms": 0.0, "status": "ok", "backend_status": 200, "backend_message": "ok"}
