@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import StreamingResponse
 from llm import LLM_Model
 from pydantic import BaseModel
-from auth import get_current_user
+from api.auth import get_current_user
 from dotenv import load_dotenv
 
 load_dotenv()
