@@ -1,10 +1,12 @@
 # Open-LLM (WIP)
-A flexible multi-propose agentic LLM chatbot suitable for working with data at scale.
-There will be specialized NLP functionality built in, given its incredible performance these tasks. Our first focus will be to get this to work as a general chat bot. 
+A flexible multi-purpose agentic LLM chatbot suitable for working with data at scale.
+Moving forward, this will be the public-free version of Hanley LLM, which is basically a better-designed version of everyting you'll see here. 
+Here, I will mainly just focus on rapid prototyping and getting it to "just work." 
+You can use this to get an idea of my basic skill sets with AI, or to learn things yourself. If you would like to see Hanley LLM, snippets of it at least, please reach out to me directly. 
 
 
 # How to use
-simply run the file on the command line for now using main.py
+simply run the file on the command line for now, using main.py
 ```
 python main.py
 ```
